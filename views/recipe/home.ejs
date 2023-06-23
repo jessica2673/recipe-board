@@ -5,7 +5,17 @@
     <%- include("../partials/nav.ejs") %>
     <div>
         <h2>What's Cooking</h2>
-        
+        <% if (recipes.length > 0) { %>
+            <% recipes.forEach(recipe => { %>
+                <a href="/recipes/<%= recipe._id%>"><h2><%= recipe.recipe %></h2></a>
+                <p><%= recipe.author %></p>
+                <p><%= recipe.time %></p>
+                <p><%= recipe.description %></p>
+                <p><%= recipe.ingredients %></p>
+            <% }) %>
+        <% } else { %>
+            <h2>No recipes yet!</h2>
+        <% } %>
     </div>
     
     <%- include('../partials/footer.ejs') %>

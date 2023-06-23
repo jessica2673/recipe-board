@@ -22,7 +22,13 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
-    res.render('./recipe/home', { title: "Home" })
+    Recipe.find()
+        .then((result) => {
+            res.render('./recipe/home', { title: 'Home', recipes: result });
+        })
+        .catch((err) => {
+            console.log(err);
+        })
 });
 
 app.get('/recipes', (req, res)=> {
@@ -48,6 +54,29 @@ app.post('/recipes', (req, res) => {
 app.get('/create', (req, res) => {
     res.render('./recipe/createRecipe', { title: "Create" });
 });
+
+app.get('/recipes/:id', (req, res) => {
+    const id = req.params.id;
+    Recipe.findById(id)
+        .then(found => {
+            res.render('./recipe/details', { title: found.recipe, recipe: found })
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+});
+
+app.delete('/recipes/:id', (req, res) => {
+    const id = req.params.id;
+
+    Recipe.findByIdAndDelete(id)
+        .then((result) => {
+            res.json({ redirect: '/recipes' })
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+}) 
 
 app.use((req, res) => {
     res.status(404).render('error', { title: "" }) 
