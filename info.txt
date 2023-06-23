@@ -1,0 +1,15 @@
+Data inputs:
+recipe
+date posted 
+author 
+time needed 
+description 
+ingredients 
+instructions 
+
+Functions:
+add recipe
+delete recipe
+view all recipes 
+view one recipe 
+
