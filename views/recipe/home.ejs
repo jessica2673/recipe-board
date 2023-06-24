@@ -3,15 +3,20 @@
 <%- include('../partials/header.ejs') %>
 <body>
     <%- include("../partials/nav.ejs") %>
-    <div>
-        <h2>What's Cooking</h2>
+    <div class="home-page">
+        <h1>What's Cooking</h1>
         <% if (recipes.length > 0) { %>
             <% recipes.forEach(recipe => { %>
-                <a href="/recipes/<%= recipe._id%>"><h2><%= recipe.recipe %></h2></a>
-                <p><%= recipe.author %></p>
-                <p><%= recipe.time %></p>
-                <p><%= recipe.description %></p>
-                <p><%= recipe.ingredients %></p>
+                <div class="recipe">
+                    <a class="home-recipe-title" href="/recipes/<%= recipe._id%>"><h2><%= recipe.recipe %></h2></a>
+                    <div class="home-short-info">
+                        <p>Author: <%= recipe.author %></p>
+                        <p>Time required: <%= recipe.time %> minutes</p>
+                    </div>
+                    <p>Description: <%= recipe.description %></p>
+                    <p>Ingredients required: <%= recipe.ingredients %></p>
+                    <p>Instructions: <%= recipe.instructions %></p>
+                </div>
             <% }) %>
         <% } else { %>
             <h2>No recipes yet!</h2>

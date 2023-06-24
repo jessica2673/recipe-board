@@ -26,6 +26,10 @@ const RecipeSchema = new Schema({
         type: String,
         required: true
     },
+    instructions: {
+        type: String,
+        required: true
+    },
 }, { timestamps: true });
 
 const Recipe = mongoose.model('Recipe', RecipeSchema);
