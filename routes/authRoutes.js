@@ -1,9 +1,10 @@
-const router = require('express').Router();
+const express = require('express');
+const router = express.Router();
 const passport = require('passport');
 
 // login
 router.get('/login', (req, res) => {
-    res.render('login', { user: req.user });
+    res.render('./login', { title: 'Login', user: req.user });
 });
 
 // logout
@@ -15,7 +16,7 @@ router.get('/logout', function(req, res, next){
   });
 
 router.get('/google', passport.authenticate('google', {
-    scope: ['profile']
+    scope: ['profile', 'email']
 }));
 
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {

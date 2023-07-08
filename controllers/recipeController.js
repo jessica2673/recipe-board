@@ -3,7 +3,7 @@ const Recipe = require('../models/recipeModel');
 const recipe_home = (req, res) => {
     Recipe.find()
         .then((result) => {
-            res.render('./recipe/home', { title: 'Home', recipes: result });
+            res.render('./recipe/home', { title: 'Home', recipes: result, user: req.user });
         })
         .catch((err) => {
             console.log(err);
@@ -15,7 +15,7 @@ const recipe_home_redirect = (req, res)=> {
 }
 
 const recipe_about = (req, res) => {
-    res.render('./recipe/about', { title: "About" });
+    res.render('./recipe/about', { title: "About", user: req.user });
 }
 
 const post_new_recipe = (req, res) => {
@@ -31,14 +31,14 @@ const post_new_recipe = (req, res) => {
 }
 
 const recipe_create_form = (req, res) => {
-    res.render('./recipe/createRecipe', { title: "Create" });
+    res.render('./recipe/createRecipe', { title: "Create", user: req.user });
 }
 
 const get_single_recipe = (req, res) => {
     const id = req.params.id;
     Recipe.findById(id)
         .then(found => {
-            res.render('./recipe/details', { title: found.recipe, recipe: found })
+            res.render('./recipe/details', { title: found.recipe, recipe: found, user: req.user })
         })
         .catch((err) => {
             console.log(err);
