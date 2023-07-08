@@ -3,7 +3,7 @@ const Recipe = require('../models/recipeModel');
 const recipe_home = (req, res) => {
     Recipe.find()
         .then((result) => {
-            res.render('./recipe/home', { title: 'Home', recipes: result});
+            res.render('./recipe/home', { title: 'Home', recipes: result });
         })
         .catch((err) => {
             console.log(err);
