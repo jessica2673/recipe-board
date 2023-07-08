@@ -30,6 +30,10 @@ const RecipeSchema = new Schema({
         type: String,
         required: true
     },
+    creatorId: {
+        type: String,
+        required: false
+    }
 }, { timestamps: true });
 
 const Recipe = mongoose.model('Recipe', RecipeSchema);

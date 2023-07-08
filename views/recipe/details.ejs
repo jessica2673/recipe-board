@@ -15,7 +15,9 @@
         <p>Ingredients required: <%= recipe.ingredients %></p>
         <p>Instructions: <%= recipe.instructions %></p>
         
-        <a class="delete" data-doc="<%= recipe._id %>">Delete Recipe</a>
+        <% if (user && user._id == recipe.creatorId) { %>
+            <a class="delete" data-doc="<%= recipe._id %>">Delete Recipe</a>
+        <% } %>
     </div>
 
     <%- include('../partials/footer.ejs') %>

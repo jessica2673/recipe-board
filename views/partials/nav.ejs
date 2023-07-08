@@ -6,9 +6,10 @@
         <li><a href="/create">Create New Recipe</a></li>
         <% if (!user) { %>
             <li><a href="/auth/login">Login</a></li>
-        <% } else { %>    
+        <% } else { %>
+            <a href="/profile" ><img id="nav-img" src="<%= user.thumbnail %>" alt="image"></a>
             <li><a href="/auth/logout">Logout</a></li>
         <% } %>
-        <a href="/profile" ><img id="nav-img" src="<%= user.thumbnail %>" alt="image"></a>
+        
     </ul>
 </nav>

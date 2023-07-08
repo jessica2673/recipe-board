@@ -15,14 +15,20 @@ const recipe_home_redirect = (req, res)=> {
 }
 
 const recipe_about = (req, res) => {
-    res.render('./recipe/about', { title: "About", user: req.user });
+    res.render('./recipe/about', { title: "About", user: req.user});
 }
 
 const post_new_recipe = (req, res) => {
     const recipe = new Recipe(req.body);
-
+    if (req.user) {
+        recipe.creatorId = req.user._id;
+    } else {
+        console.log("Warning: anonymous postings will not be able to be deleted!");
+    }
+    
     recipe.save()
         .then((result) => {
+            console.log(recipe);
             res.redirect('/recipes');
         })
         .catch((err) => {
