@@ -53,7 +53,6 @@ passport.use(
                     thumbnail: profile._json.picture,
                     email: profile.email,
                 }).save().then((newUser) => {
-                    console.log('created new user: ', newUser);
                     done(null, newUser);
                 })
             }

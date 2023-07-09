@@ -1,5 +1,6 @@
 const Recipe = require('../models/recipeModel');
 
+
 const recipe_home = (req, res) => {
     Recipe.find()
         .then((result) => {
@@ -23,8 +24,6 @@ const post_new_recipe = (req, res) => {
     const recipe = new Recipe(req.body);
     if (req.user) {
         recipe.creatorId = req.user._id;
-    } else {
-        console.log("Warning: anonymous postings will not be able to be deleted!");
     }
     
     recipe.save()
