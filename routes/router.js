@@ -14,6 +14,10 @@ router.get('/create', recipeController.recipe_create_form);
 
 router.get('/recipes/:id', recipeController.get_single_recipe);
 
+router.get('/recipes/update/:id', recipeController.get_recipe_update);
+
+router.post('/recipes/update/:id', recipeController.update_recipe)
+
 router.delete('/recipes/:id', recipeController.delete_recipe);
 
 module.exports = router;

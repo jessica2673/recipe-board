@@ -19,6 +19,7 @@ const recipe_about = (req, res) => {
 }
 
 const post_new_recipe = (req, res) => {
+    console.log(req);
     const recipe = new Recipe(req.body);
     if (req.user) {
         recipe.creatorId = req.user._id;
@@ -51,6 +52,35 @@ const get_single_recipe = (req, res) => {
         })
 }
 
+const get_recipe_update = (req, res) => {
+    const id = req.params.id;
+    Recipe.findById(id)
+        .then(found => {
+            res.render('./recipe/updateRecipe', { title: 'Update', user: req.user, recipe: found, id: id });
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+}
+
+const update_recipe = (req, res) => {
+    Recipe.findOneAndUpdate(
+        {_id: req.params.id},
+        {
+            recipe: req.body.recipe,
+            author: req.body.author,
+            time: req.body.time,
+            description: req.body.description,
+            ingredients: req.body.ingredients,
+            instructions: req.body.instructions,
+        }
+    ).then((result) => {
+        res.redirect('/');
+    }).catch((err) => {
+        console.log(err);
+    })
+}
+
 const delete_recipe = (req, res) => {
     const id = req.params.id;
 
@@ -70,5 +100,7 @@ module.exports = {
     post_new_recipe,
     recipe_create_form,
     get_single_recipe,
+    get_recipe_update,
+    update_recipe,
     delete_recipe,
 };

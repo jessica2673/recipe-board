@@ -4,9 +4,10 @@
 <body>
     <%- include("../partials/nav.ejs") %>
     <div class="details">
-        <a class="back" href="/">Back</a>
+        <div class="back-div"><a class="back" href="/">Back</a></div>
 
         <h2><%= recipe.recipe %></h2>
+        <p class="time-posted">Date posted: <%= recipe.createdAt.toDateString() %></p>
         <div class="short-info">
             <p>Author: <%= recipe.author %></p>
             <p>Time required: <%= recipe.time %> minutes</p>
@@ -16,6 +17,7 @@
         <p>Instructions: <%= recipe.instructions %></p>
         
         <% if (user && user._id == recipe.creatorId) { %>
+            <a class="update" href="/recipes/update/<%= recipe._id%>">Update</a>
             <a class="delete" data-doc="<%= recipe._id %>">Delete Recipe</a>
         <% } %>
     </div>

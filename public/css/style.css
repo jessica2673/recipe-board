@@ -3,6 +3,11 @@
     margin: 0;
 }
 
+body {
+    min-height: 100vh;
+    position: relative;
+}
+
 /* nav.ejs */
 nav {
     display: flex;
@@ -63,8 +68,10 @@ nav > a {
 footer {
     display: flex;
     bottom: 0px;
+    margin-top: 1em;
     padding-bottom: 1em;
     margin-left: 43%;
+    position: absolute;
 }
 
 /* about.ejs */
@@ -84,16 +91,25 @@ footer {
     font-size: 1.3em;
 }
 
+.back-div {
+    padding-bottom: 1em;
+}
+
 .back {
     font-size: 0.8em;
     color: black;
 }
 
+/* Also applies to home page*/
+.time-posted {
+    color: grey;
+    padding-top: 0.5em;
+}
+
 .short-info {
     display: flex;
     gap: 1em;
-    padding-top: 1em;
-    padding-bottom: 1em;
+    padding-bottom: 0.7em;
     color: grey;
 }
 
@@ -101,7 +117,8 @@ footer {
     margin-bottom: 0.5em;
 }
 
-.delete {
+.delete, .update {
+    text-decoration: none;
     display: block;
     border-radius: 2px;
     box-shadow: 2px 2px 2px 0px grey;
@@ -112,7 +129,7 @@ footer {
     color: rgb(255, 246, 235);
 }
 
-.delete:hover {
+.delete:hover, .update:hover {
     background-color: rgb(224, 157, 34);
     cursor: pointer;
 }
@@ -166,6 +183,16 @@ form > button:hover {
     cursor: pointer;
 }
 
+#login-warn {
+    margin-top: 1em;
+}
+
+/* updateRecipe.ejs */
+.update-page {
+    padding: 1em 3em 1em 4em;
+    font-size: 1.3em;
+}
+
 /* home.ejs */
 .home-page {
     padding: 1em 3em 1em 4em;
@@ -183,7 +210,6 @@ form > button:hover {
 .home-short-info {
     display: flex;
     gap: 1em;
-    padding-top: 0.5em;
     padding-bottom: 0.5em;
     color: grey;
 }
