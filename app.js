@@ -9,6 +9,7 @@ const passport = require('passport');
 const session = require('express-session');
 const cookieSession = require('cookie-session');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
+const GitHubStrategy = require('passport-github2').Strategy;
 const User = require('./models/userModel');
 
 const app = express();
@@ -51,12 +52,35 @@ passport.use(
                     googleId: profile.id,
                     username: profile.displayName,
                     thumbnail: profile._json.picture,
-                    email: profile.email,
+                    moreInfo: profile.email,
                 }).save().then((newUser) => {
                     done(null, newUser);
                 })
             }
-        });
+        })
+    })
+);
+
+passport.use(
+    new GitHubStrategy({
+        clientID: keys.github.clientID,
+        clientSecret: keys.github.clientSecret,
+        callbackURL: '/auth/github/redirect'
+    }, (accessToken, refreshToken, profile, done) => {
+        User.findOne({githubId: profile.id}).then((currentUser) => {
+            if (currentUser) {
+                done(null, currentUser);
+            } else {
+                new User({
+                    githubId: profile.id,
+                    username: profile.displayName,
+                    thumbnail: profile._json.avatar_url,
+                    moreInfo: profile.username,
+                }).save().then((newUser) => {
+                    done(null, newUser);
+                })
+            }
+        })
     })
 );
 

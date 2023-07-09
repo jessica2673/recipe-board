@@ -6,18 +6,13 @@ const Recipe = require('../models/recipeModel');
 const checkUser = async (req, res, next) => {
     if (!req.user) {
         // if user is not logged in
-        console.log(req.user);
         res.redirect('/auth/login');
     } else {
         const userId = req.user._id.toString();
         let callNext = Recipe.findById(req.params.id)
             .then(found => {
-                // console.log("here" + found.creatorId);
                 console.log('userId: ' + userId + ' and recipeCreator: ' + found.creatorId);
-                // console.log(userId.localeCompare(found.creatorId));
-                console.log(userId === found.creatorId);
                 if (userId === found.creatorId) {
-                    console.log('here!');
                     return true;
                 }
             })

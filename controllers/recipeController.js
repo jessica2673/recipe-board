@@ -20,7 +20,6 @@ const recipe_about = (req, res) => {
 }
 
 const post_new_recipe = (req, res) => {
-    console.log(req);
     const recipe = new Recipe(req.body);
     if (req.user) {
         recipe.creatorId = req.user._id;
@@ -28,7 +27,6 @@ const post_new_recipe = (req, res) => {
     
     recipe.save()
         .then((result) => {
-            console.log(recipe);
             res.redirect('/recipes');
         })
         .catch((err) => {

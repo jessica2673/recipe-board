@@ -232,12 +232,12 @@ form > button:hover {
     margin-top: 5%;
 }
 
-.googleLinkExt {
+.loginLinkExt {
     margin-top: 1em;
     margin-left: 9%;
 }
 
-.googleLink {
+.loginLink {
     font-size: 1.3em;
     color: black;
 }
@@ -253,6 +253,12 @@ form > button:hover {
     padding: 1em 3em 1em 4em;
 }
 
-.email {
+.moreInfo {
     font-size: 1.3em;
+}
+
+.pfp {
+    max-height: 7em;
+    width: fit-content;
+    border-radius: 50%;
 }

@@ -9,8 +9,8 @@
             <h1>Welcome to your account, <%= user.username %> </h1>
         </header>
         <div class="profile-info">
-            <img src="<%= user.thumbnail %>" alt="image">
-            <p class="email"><%= user.email %></p>
+            <img class="pfp" src="<%= user.thumbnail %>" alt="image">
+            <p class="moreInfo"><%= user.moreInfo %></p>
         </div>
     </div>
     <%- include('./partials/footer.ejs') %>
