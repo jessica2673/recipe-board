@@ -15,7 +15,7 @@ const RecipeSchema = new Schema({
         required: false
     },
     time: {
-        type: String,
+        type: Number,
         required: true
     },
     description: {
@@ -33,7 +33,10 @@ const RecipeSchema = new Schema({
     creatorId: {
         type: String,
         required: false
-    }
+    },
+    caption: String,
+    imageName: String,
+    imageUrl: String,
 }, { timestamps: true });
 
 const Recipe = mongoose.model('Recipe', RecipeSchema);

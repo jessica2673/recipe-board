@@ -222,6 +222,18 @@ form > button:hover {
     color: rgb(208, 147, 33);
 }
 
+.recipeImage {
+    max-height: 200px;
+    width: fit-content;
+    display: block;
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+}
+
+caption {
+    margin-bottom: 1em;
+}
+
 /* 404.ejs */
 .error-text {
     margin: 2em;

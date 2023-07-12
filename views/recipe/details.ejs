@@ -20,6 +20,10 @@
             <a class="update" href="/recipes/update/<%= recipe._id%>">Update</a>
             <a class="delete" data-doc="<%= recipe._id %>">Delete Recipe</a>
         <% } %>
+        <% if (recipe.imageName) { %>
+            <img src="<%= recipe.imageUrl %>" alt="image here" class="recipeImage">
+            <caption><%= recipe.caption %></caption>
+        <% } %>
     </div>
 
     <%- include('../partials/footer.ejs') %>

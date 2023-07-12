@@ -10,6 +10,7 @@ const session = require('express-session');
 const cookieSession = require('cookie-session');
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const GitHubStrategy = require('passport-github2').Strategy;
+// const LocalStrategy = require('passport-local').Strategy;
 const User = require('./models/userModel');
 
 const app = express();
@@ -93,6 +94,36 @@ passport.deserializeUser((id, done) => {
         done(null, user);
     });
 });
+
+app.delete('/image/delete/:id', async (req, res) => {
+    const id = +req.params.id;
+
+    const image = await Image.findById(req.params.id);
+
+    if (!image) {
+        res.status(404).send('Post not found');
+        return;
+    }
+
+    const params = {
+        Bucket: bucketName,
+        Key: image.imageName,
+    }
+
+    const command = new DeleteObjectCommand(params);
+    await s3.send(command);
+
+    // delete image from MongoDB
+    Image.findByIdAndDelete(req.params.id)
+        .then((result) => {
+            res.json({ redirect: '/' })
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+
+    res.redirect('/');
+})
 
 app.use('/profile', profileRoutes);
 app.use('/auth', authRoutes);

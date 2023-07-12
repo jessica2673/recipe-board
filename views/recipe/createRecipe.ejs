@@ -6,7 +6,7 @@
     <div class="create-page">
         <h1>Create A New Recipe</h1>
 
-        <form action="/recipes" method="POST">
+        <form action="/recipes" method="POST" enctype="multipart/form-data">
             <div>
                 <label for="recipe">Recipe name:</label>
                 <input type="text" id="recipe" name="recipe" required>
@@ -37,8 +37,13 @@
                 <textarea name="instructions" id="instructions" required></textarea>
             </div>
 
+            <input type="file" name="imageName" />
+            <label for="caption">Caption:</label>
+            <input type="text" id="caption" name="caption" required/>
+
             <button>Submit</button>
         </form>
+
         <% if (!user) { %>
             <p id="login-warn">Warning: anonymous postings cannot be deleted!</p>
         <% } %>

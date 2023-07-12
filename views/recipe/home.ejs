@@ -18,6 +18,10 @@
                     <p>Ingredients required: <%= recipe.ingredients %></p>
                     <p>Instructions: <%= recipe.instructions %></p>
                 </div>
+                <% if (recipe.imageName) { %>
+                    <img src="<%= recipe.imageUrl %>" alt="image here" class="recipeImage">
+                    <caption><%= recipe.caption %></caption>
+                <% } %>
             <% }) %>
         <% } else { %>
             <h2>No recipes yet!</h2>

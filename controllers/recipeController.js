@@ -1,14 +1,49 @@
 const Recipe = require('../models/recipeModel');
+const keys = require('../config/keys');
+// for image upload
+const Image = require('../models/imageModel');
+const multer = require('multer');
+const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
+const crypto = require('crypto');
+const sharp = require('sharp');
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
+const randomName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex');
 
-const recipe_home = (req, res) => {
-    Recipe.find()
-        .then((result) => {
-            res.render('./recipe/home', { title: 'Home', recipes: result, user: req.user });
-        })
-        .catch((err) => {
-            console.log(err);
-        })
+const bucketName = keys.AWS.bucket_name;
+const bucketRegion = keys.AWS.bucket_region;
+const accessKey = keys.AWS.access_key;
+const secretAccessKey = keys.AWS.secret_access_key;
+
+const s3 = new S3Client({
+    credentials: {
+        accessKeyId: accessKey,
+        secretAccessKey: secretAccessKey,
+    },
+    region: bucketRegion,
+})
+
+const recipe_home = async (req, res) => {
+    foundRecipes = await Recipe.find();
+
+    if (!foundRecipes) {
+        console.log("No recipes found");  
+    }
+    // console.log(foundRecipes);
+    loadedImages = [];
+    for (let found of foundRecipes) {
+        if (found.imageName) {
+            const getObjectParams = {
+                Bucket: bucketName,
+                Key: found.imageName,
+            }
+            const command = new GetObjectCommand(getObjectParams);
+            const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+            found.imageUrl = await url;
+        }
+        loadedImages.push(found);
+    }
+    res.render('./recipe/home', { title: 'Home', recipes: loadedImages, user: req.user });
 }
 
 const recipe_home_redirect = (req, res)=> {
@@ -19,41 +54,69 @@ const recipe_about = (req, res) => {
     res.render('./recipe/about', { title: "About", user: req.user});
 }
 
-const post_new_recipe = (req, res) => {
-    const recipe = new Recipe(req.body);
+const post_new_recipe = async (req, res) => {
+    const recipe = await new Recipe(req.body);
+    await console.log(req.file);
     if (req.user) {
         recipe.creatorId = req.user._id;
     }
-    
-    recipe.save()
+    if (req.file){
+        const buffer = await sharp(req.file.buffer).resize({width: 1000, height: 2000, fit: "contain"}).toBuffer();
+
+        const imageName = randomName();
+        const params = {
+            Bucket: bucketName, // the bucket it is being uploaded to
+            Key: imageName, // the name of the file on the user's pc before upload
+            Body: req.file.buffer, // send buffer as body
+            ContentType: req.file.mimetype,
+        }
+        recipe.imageName = imageName;
+        const command = new PutObjectCommand(params);
+        await s3.send(command);
+        await console.log("first");
+    }
+
+    await recipe.save()
         .then((result) => {
+            console.log("second");
             res.redirect('/recipes');
         })
         .catch((err) => {
             console.log(err);
         })
+    
 }
 
 const recipe_create_form = (req, res) => {
     res.render('./recipe/createRecipe', { title: "Create", user: req.user });
 }
 
-const get_single_recipe = (req, res) => {
+const get_single_recipe = async (req, res) => {
     const id = req.params.id;
-    Recipe.findById(id)
-        .then(found => {
-            res.render('./recipe/details', { title: found.recipe, recipe: found, user: req.user })
-        })
-        .catch((err) => {
-            console.log(err);
-        })
+
+    found = await Recipe.findById(id);
+
+    if (!found) {
+        console.log("Recipe not found");  
+    }
+
+    if (found.imageName) {
+        const getObjectParams = {
+            Bucket: bucketName,
+            Key: found.imageName,
+        }
+        const command = new GetObjectCommand(getObjectParams);
+        const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+        found.imageUrl = await url;
+    }
+    res.render('./recipe/details', { title: found.recipe, recipe: found, user: req.user });
 }
 
 const get_recipe_update = (req, res) => {
     const id = req.params.id;
     Recipe.findById(id)
         .then(found => {
-            res.render('./recipe/updateRecipe', { title: 'Update', user: req.user, recipe: found, id: id });
+            res.render('./recipe/updateRecipe', { title: 'Update', user: req.user, recipe: found, id: id, image: req.image });
         })
         .catch((err) => {
             console.log(err);
