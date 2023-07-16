@@ -23,6 +23,7 @@
         <% if (recipe.imageName) { %>
             <img src="<%= recipe.imageUrl %>" alt="image here" class="recipeImage">
             <caption><%= recipe.caption %></caption>
+            <a class="delete" href="/recipes/delete/image/<%= recipe._id%>">Delete Image</a>
         <% } %>
     </div>
 

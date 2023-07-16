@@ -36,6 +36,13 @@
                 <label for="instructions">Instructions:</label>
                 <textarea name="instructions" id="instructions" required><%= recipe.instructions %></textarea>
             </div>
+            
+            <% if (recipe.imageName) { %>
+                <img src="<%= recipe.imageUrl %>" alt="image here" class="recipeImage">
+                <caption><%= recipe.caption %></caption>
+            <% } %>
+
+
             <input type="file" name="imageName" />
             <label for="caption">Caption:</label>
             <input type="text" id="caption" name="caption"/>

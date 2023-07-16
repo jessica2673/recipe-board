@@ -26,7 +26,6 @@ const checkUser = async (req, res, next) => {
                 return false;
             });
         if (await callNext) {
-            console.log('next!');
             next();
         } else {
             res.redirect('/');
@@ -60,6 +59,8 @@ router.get('/recipes/update/:id', checkUser, recipeController.get_recipe_update)
 router.post('/recipes/update/:id', checkUser, upload.single('imageName'), recipeController.update_recipe)
 
 router.delete('/recipes/:id', checkUser, recipeController.delete_recipe);
+
+router.get('/recipes/delete/image/:id', checkUser, recipeController.delete_image);
 
 module.exports = router;
 

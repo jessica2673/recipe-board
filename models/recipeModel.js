@@ -36,7 +36,6 @@ const RecipeSchema = new Schema({
     },
     caption: String,
     imageName: String,
-    imageUrl: String,
 }, { timestamps: true });
 
 const Recipe = mongoose.model('Recipe', RecipeSchema);

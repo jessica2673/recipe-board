@@ -1,7 +1,6 @@
 const Recipe = require('../models/recipeModel');
 const keys = require('../config/keys');
 // for image upload
-const Image = require('../models/imageModel');
 const multer = require('multer');
 const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const crypto = require('crypto');
@@ -125,16 +124,20 @@ const get_recipe_update = (req, res) => {
 
 const update_recipe = async (req, res) => {
     await console.log(req.file);
+    // if an image was uploaded
     if (req.file) {
         const imageBefore = await Recipe.findById(req.params.id);
-        // delete old image
-        const deleteParams = {
-            Bucket: bucketName,
-            Key: imageBefore.imageName,
+        
+        // if there was another image, delete it
+        if (imageBefore.imageName) {
+            const deleteParams = {
+                Bucket: bucketName,
+                Key: imageBefore.imageName,
+            }
+        
+            const deleteCommand = await new DeleteObjectCommand(deleteParams);
+            await s3.send(deleteCommand);
         }
-    
-        const deleteCommand = await new DeleteObjectCommand(deleteParams);
-        await s3.send(deleteCommand);
 
         // create new image
         const buffer = await sharp(req.file.buffer).resize({width: 1000, height: 2000, fit: "contain"}).toBuffer();
@@ -192,6 +195,29 @@ const delete_recipe = (req, res) => {
         })
 }
 
+const delete_image = async (req, res) => {
+    const id = req.params.id;
+    const found = await Recipe.findById(id);
+    
+    // delete image from bucket
+    const deleteParams = {
+        Bucket: bucketName,
+        Key: found.imageName,
+    }
+
+    const deleteCommand = await new DeleteObjectCommand(deleteParams);
+    await s3.send(deleteCommand);
+
+    // remove caption and imageName properties
+    await Recipe.findByIdAndUpdate(
+        id, 
+        {
+            $unset: {caption: "", imageName: ""}
+        });
+    
+    await res.redirect('/recipes/' + id);
+}
+
 module.exports = {
     recipe_home,
     recipe_home_redirect,
@@ -202,4 +228,5 @@ module.exports = {
     get_recipe_update,
     update_recipe,
     delete_recipe,
+    delete_image,
 };
