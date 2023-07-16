@@ -39,14 +39,10 @@
 
             <input type="file" name="imageName" />
             <label for="caption">Caption:</label>
-            <input type="text" id="caption" name="caption" required/>
+            <input type="text" id="caption" name="caption"/>
 
             <button>Submit</button>
         </form>
-
-        <% if (!user) { %>
-            <p id="login-warn">Warning: anonymous postings cannot be deleted!</p>
-        <% } %>
     </div>
     <%- include('../partials/footer.ejs') %>
 </body>

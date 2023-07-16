@@ -57,7 +57,7 @@ router.get('/recipes/:id', recipeController.get_single_recipe);
 
 router.get('/recipes/update/:id', checkUser, recipeController.get_recipe_update);
 
-router.post('/recipes/update/:id', checkUser, recipeController.update_recipe)
+router.post('/recipes/update/:id', checkUser, upload.single('imageName'), recipeController.update_recipe)
 
 router.delete('/recipes/:id', checkUser, recipeController.delete_recipe);
 

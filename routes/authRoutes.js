@@ -9,12 +9,11 @@ router.get('/login', (req, res) => {
 
 // logout
 router.get('/logout', function(req, res, next){
-  req.logout();
-    // req.logout(function(err) {
-    //   if (err) { return next(err); }
-    //   res.redirect('/');
-    // });
+  req.logout(function(err) {
+    if (err) { return next(err); }
+    res.redirect('/');
   });
+});
 
 router.get('/google', passport.authenticate('google', {
     scope: ['profile', 'email']

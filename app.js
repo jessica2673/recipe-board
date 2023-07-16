@@ -95,41 +95,11 @@ passport.deserializeUser((id, done) => {
     });
 });
 
-app.delete('/image/delete/:id', async (req, res) => {
-    const id = +req.params.id;
-
-    const image = await Image.findById(req.params.id);
-
-    if (!image) {
-        res.status(404).send('Post not found');
-        return;
-    }
-
-    const params = {
-        Bucket: bucketName,
-        Key: image.imageName,
-    }
-
-    const command = new DeleteObjectCommand(params);
-    await s3.send(command);
-
-    // delete image from MongoDB
-    Image.findByIdAndDelete(req.params.id)
-        .then((result) => {
-            res.json({ redirect: '/' })
-        })
-        .catch((err) => {
-            console.log(err);
-        })
-
-    res.redirect('/');
-})
-
 app.use('/profile', profileRoutes);
 app.use('/auth', authRoutes);
 app.use('/', routes);
 
 app.use((req, res) => {
-    res.status(404).render('error', { title: "" }) 
+    res.status(404).render('error', { title: "", user: req.user }) 
 });
 

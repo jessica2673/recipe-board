@@ -6,7 +6,7 @@
     <div class="update-page">
         <h1><%= recipe.recipe %></h1>
 
-        <form action="/recipes/update/<%= id %>" method="POST">
+        <form action="/recipes/update/<%= id %>" method="POST" enctype="multipart/form-data">
             <div>
                 <label for="recipe">Recipe name:</label>
                 <input type="text" id="recipe" name="recipe" value="<%= recipe.recipe %>" required>
@@ -36,6 +36,9 @@
                 <label for="instructions">Instructions:</label>
                 <textarea name="instructions" id="instructions" required><%= recipe.instructions %></textarea>
             </div>
+            <input type="file" name="imageName" />
+            <label for="caption">Caption:</label>
+            <input type="text" id="caption" name="caption"/>
 
             <button>Update</button>
         </form>

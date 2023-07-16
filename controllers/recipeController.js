@@ -123,22 +123,61 @@ const get_recipe_update = (req, res) => {
         })
 }
 
-const update_recipe = (req, res) => {
-    Recipe.findOneAndUpdate(
-        {_id: req.params.id},
-        {
-            recipe: req.body.recipe,
-            author: req.body.author,
-            time: req.body.time,
-            description: req.body.description,
-            ingredients: req.body.ingredients,
-            instructions: req.body.instructions,
+const update_recipe = async (req, res) => {
+    await console.log(req.file);
+    if (req.file) {
+        const imageBefore = await Recipe.findById(req.params.id);
+        // delete old image
+        const deleteParams = {
+            Bucket: bucketName,
+            Key: imageBefore.imageName,
         }
-    ).then((result) => {
-        res.redirect('/');
-    }).catch((err) => {
-        console.log(err);
-    })
+    
+        const deleteCommand = await new DeleteObjectCommand(deleteParams);
+        await s3.send(deleteCommand);
+
+        // create new image
+        const buffer = await sharp(req.file.buffer).resize({width: 1000, height: 2000, fit: "contain"}).toBuffer();
+        const imageName = randomName();
+        const createParams = {
+            Bucket: bucketName, // the bucket it is being uploaded to
+            Key: imageName, // the name of the file on the user's pc before upload
+            Body: req.file.buffer, // send buffer as body
+            ContentType: req.file.mimetype,
+        }
+        const createCommand = await new PutObjectCommand(createParams);
+        const newImageName = imageName;
+        await s3.send(createCommand);
+
+        await Recipe.findOneAndUpdate(
+            {_id: req.params.id},
+            {
+                recipe: req.body.recipe,
+                author: req.body.author,
+                time: req.body.time,
+                description: req.body.description,
+                ingredients: req.body.ingredients,
+                instructions: req.body.instructions,
+                imageName: newImageName,
+                caption: req.body.caption,
+            }
+        );
+
+        await res.redirect('/');
+    } else {
+        await Recipe.findOneAndUpdate(
+            {_id: req.params.id},
+            {
+                recipe: req.body.recipe,
+                author: req.body.author,
+                time: req.body.time,
+                description: req.body.description,
+                ingredients: req.body.ingredients,
+                instructions: req.body.instructions,
+            }
+        );
+        await res.redirect('/');
+    }
 }
 
 const delete_recipe = (req, res) => {
