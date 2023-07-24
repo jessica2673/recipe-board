@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Recipe = require('../models/recipeModel');
 const keys = require('../config/keys');
 // for image upload
@@ -24,11 +25,11 @@ const s3 = new S3Client({
 
 const recipe_home = async (req, res) => {
     foundRecipes = await Recipe.find();
-
+    
     if (!foundRecipes) {
         console.log("No recipes found");  
     }
-    // console.log(foundRecipes);
+
     loadedImages = [];
     for (let found of foundRecipes) {
         if (found.imageName) {
@@ -38,11 +39,11 @@ const recipe_home = async (req, res) => {
             }
             const command = new GetObjectCommand(getObjectParams);
             const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-            found.imageUrl = await url;
+            found._doc.imageUrl = await url;
         }
         loadedImages.push(found);
     }
-    res.render('./recipe/home', { title: 'Home', recipes: loadedImages, user: req.user });
+    await res.status(200).json(loadedImages);
 }
 
 const recipe_home_redirect = (req, res)=> {
@@ -92,6 +93,9 @@ const recipe_create_form = (req, res) => {
 
 const get_single_recipe = async (req, res) => {
     const id = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404);
+    }
 
     found = await Recipe.findById(id);
 
@@ -113,6 +117,11 @@ const get_single_recipe = async (req, res) => {
 
 const get_recipe_update = (req, res) => {
     const id = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404);
+    }
+
     Recipe.findById(id)
         .then(found => {
             res.render('./recipe/updateRecipe', { title: 'Update', user: req.user, recipe: found, id: id, image: req.image });
@@ -186,6 +195,10 @@ const update_recipe = async (req, res) => {
 const delete_recipe = (req, res) => {
     const id = req.params.id;
 
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404);
+    }
+
     Recipe.findByIdAndDelete(id)
         .then((result) => {
             res.json({ redirect: '/recipes' })
@@ -197,6 +210,11 @@ const delete_recipe = (req, res) => {
 
 const delete_image = async (req, res) => {
     const id = req.params.id;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404);
+    }
+    
     const found = await Recipe.findById(id);
     
     // delete image from bucket

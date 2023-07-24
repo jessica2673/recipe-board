@@ -14,6 +14,7 @@ const GitHubStrategy = require('passport-github2').Strategy;
 const User = require('./models/userModel');
 
 const app = express();
+app.use(express.json());
 
 app.set('view engine', 'ejs');
 
@@ -28,7 +29,7 @@ app.use(passport.session());
 
 mongoose.connect(keys.mongo.dbURI)
     .then((result) => {
-        app.listen(3000);
+        app.listen(4000);
         console.log('connected to db');
     })
     .catch((err) => {
@@ -97,7 +98,7 @@ passport.deserializeUser((id, done) => {
 
 app.use('/profile', profileRoutes);
 app.use('/auth', authRoutes);
-app.use('/', routes);
+app.use('/api', routes);
 
 app.use((req, res) => {
     res.status(404).render('error', { title: "", user: req.user }) 
