@@ -47,7 +47,7 @@ const recipe_home = async (req, res) => {
 }
 
 const recipe_home_redirect = (req, res)=> {
-    res.redirect('/');
+    res.redirect('/api');
 }
 
 const recipe_about = (req, res) => {
@@ -132,7 +132,6 @@ const get_recipe_update = (req, res) => {
 }
 
 const update_recipe = async (req, res) => {
-    await console.log(req.file);
     // if an image was uploaded
     if (req.file) {
         const imageBefore = await Recipe.findById(req.params.id);

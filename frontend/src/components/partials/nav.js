@@ -2,28 +2,15 @@ import React from "react";
 import { useEffect,useState } from "react";
 import { Link } from 'react-router-dom';
 
-const Nav = () => {
-    const [user, setUser] = useState(null)
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            const response = await fetch('/api')
-            const json = await response.json()
-            if (response.ok) {
-                setUser(json)
-            }
-        }
-
-        fetchUser()
-    }, [])
+const Nav = (user) => {
 
     return (
         <nav>
-            <Link to="/"><h1>Let It Cook</h1></Link>
+            <Link to="/api"><h1>Let It Cook</h1></Link>
             <ul id="nav-options">
-                <li><Link to="/">Recipes</Link></li>
-                <li><Link to="/about">About</Link></li>
-                <li><Link to="/create">Create New Recipe</Link></li>
+                <li><Link to="/api">Recipes</Link></li>
+                <li><Link to="/api/about">About</Link></li>
+                <li><Link to="/api/create">Create New Recipe</Link></li>
                 {(!user) ?
                     <li><Link to="/auth/login">Login</Link></li>
                 :

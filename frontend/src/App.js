@@ -14,14 +14,32 @@ import UpdateRecipe from './components/recipe/updateRecipe';
 import Details from './components/recipe/details';
 
 function App() {
+  const [user, setUser] = useState(null)
+  console.log('here')
+  useEffect(() => {
+      const fetchUser = async () => {
+          const response = await fetch('/profile/extra')
+          const json = await response.json()
+          console.log(json);
+          if (response.ok) {
+              setUser(json)
+          }
+      }
+
+      fetchUser()
+  }, [])
+
   return (
     <div>
       <BrowserRouter>
+        <Nav user={user}/>
         <Routes>
           <Route path="/api" element={<Home />}/>
-          <Route element={<Footer />}
-          />
+          <Route path="/api/about" element={<About />}/>
+          <Route path="/api/create" element={<CreateRecipe />} />
+          <Route path="/api/create" element={<CreateRecipe />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </div>
   )

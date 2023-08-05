@@ -9,8 +9,10 @@ const check = (req, res, next) => {
     }
 };
 
-router.get('/', check, (req, res) => {
-    res.render('profile', { title: "Profile", user: req.user });
+router.get('/extra', check, async (req, res) => {
+    // res.render('profile', { title: "Profile", user: req.user });
+    console.log(req.user);
+    await res.status(200).json(req.user);
 });
 
 module.exports = router;

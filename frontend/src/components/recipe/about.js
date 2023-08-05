@@ -4,9 +4,7 @@ import { Link } from "react-router-dom";
 const About = () => {
     return (
         <div>
-            {/* <%- include('../partials/header.ejs') %> */}
             <body>
-                {/* <%- include("../partials/nav.ejs") %> */}
                 <div class="about-page">
                     <h1>About!</h1>
                     <div>
@@ -16,7 +14,6 @@ const About = () => {
                         </p>
                     </div>
                 </div>
-                {/* <%- include('../partials/footer.ejs') %> */}
             </body>
         </div>
     )
