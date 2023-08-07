@@ -4,23 +4,34 @@ const passport = require('passport');
 
 // login
 router.get('/login', (req, res) => {
-    res.render('./login', { title: 'Login', user: req.user });
+    console.log('login called');
+    res.render('./login', { title: 'Login' });
 });
 
 // logout
 router.get('/logout', function(req, res, next){
   req.logout();
-  res.redirect('/');
+  res.redirect('/api');
 });
 
-router.get('/google', passport.authenticate('google', {
+router.get('/test', (req, res) => {
+  res.redirect('/auth/next');
+  // res.json('works!');
+})
+
+router.get('/next',(req, res) =>{
+  res.json('works!');
+})
+
+router.post('/google', passport.authenticate('google', {
     scope: ['profile', 'email']
 }));
 
 router.get('/google/redirect', passport.authenticate('google'), (req, res) => {
-    // res.redirect('/profile');
-    const {profile, email} = req.body
-    res.json({profile, email})
+    res.redirect('/profile');
+    // console.log(req.body);
+    // const {profile, email} = req.body
+    // res.json(req)
 });
 
 router.get('/github', passport.authenticate('github', {

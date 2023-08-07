@@ -2,42 +2,42 @@ import React from "react";
 
 const CreateRecipe = () => {
     return (
-        <div class="create-page">
+        <div className="create-page">
             <h1>Create A New Recipe</h1>
 
-            <form action="/recipes" method="POST" enctype="multipart/form-data">
+            <form action="/recipes" method="POST" encType="multipart/form-data">
                 <div>
-                    <label for="recipe">Recipe name:</label>
+                    <label htmlFor="recipe">Recipe name:</label>
                     <input type="text" id="recipe" name="recipe" required></input>
                 </div>
                 
                 <div>
-                    <label for="title">Author name:</label>
+                    <label htmlFor="title">Author name:</label>
                     <input type="text" id="author" name="author" required></input>
                 </div>
                 
                 <div>
-                    <label for="title">Time required (minutes):</label>
+                    <label htmlFor="title">Time required (minutes):</label>
                     <input type="text" id="time" name="time" required></input>
                 </div>
 
-                <div class="input-textarea">
-                    <label for="description">Description:</label>
+                <div className="input-textarea">
+                    <label htmlFor="description">Description:</label>
                     <textarea name="description" id="description" required></textarea>            
                 </div>
 
-                <div class="input-textarea">
-                    <label for="body">Ingredients:</label>
+                <div className="input-textarea">
+                    <label htmlFor="body">Ingredients:</label>
                     <textarea name="ingredients" id="ingredients" required></textarea>
                 </div>
                 
-                <div class="input-textarea">
-                    <label for="instructions">Instructions:</label>
+                <div className="input-textarea">
+                    <label htmlFor="instructions">Instructions:</label>
                     <textarea name="instructions" id="instructions" required></textarea>
                 </div>
 
                 <input type="file" name="imageName" />
-                <label for="caption">Caption:</label>
+                <label htmlFor="caption">Caption:</label>
                 <input type="text" id="caption" name="caption"/>
 
                 <button>Submit</button>

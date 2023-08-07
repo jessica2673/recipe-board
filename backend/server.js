@@ -8,6 +8,7 @@ const keys = require('./config/keys');
 const passport = require('passport');
 const session = require('express-session');
 const cookieSession = require('cookie-session');
+const cors = require("cors")
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const GitHubStrategy = require('passport-github2').Strategy;
 // const LocalStrategy = require('passport-local').Strategy;
@@ -26,6 +27,13 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(cors({
+    origin: "http://localhost:3000",
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+  })
+);
 
 mongoose.connect(keys.mongo.dbURI)
     .then((result) => {
@@ -46,6 +54,7 @@ passport.use(
         clientSecret: keys.google.clientSecret,
         callbackURL: '/auth/google/redirect'
     }, (accessToken, refreshToken, profile, done) => {
+        console.log('in google strategy')
         User.findOne({googleId: profile.id}).then((currentUser) => {
             if (currentUser) {
                 done(null, currentUser);
@@ -101,6 +110,6 @@ app.use('/auth', authRoutes);
 app.use('/api', routes);
 
 app.use((req, res) => {
-    res.status(404).render('error', { title: "", user: req.user }) 
+    res.status(404).render('./error', { title: "" }) 
 });
 

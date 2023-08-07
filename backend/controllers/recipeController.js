@@ -47,11 +47,11 @@ const recipe_home = async (req, res) => {
 }
 
 const recipe_home_redirect = (req, res)=> {
-    res.redirect('/api');
+    res.redirect('/');
 }
 
 const recipe_about = (req, res) => {
-    res.render('./recipe/about', { title: "About", user: req.user});
+    res.render('./recipe/about', { title: "About" });
 }
 
 const post_new_recipe = async (req, res) => {

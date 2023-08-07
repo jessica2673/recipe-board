@@ -5,24 +5,26 @@ export const useLogin = () => {
     const { dispatch } = useAuthContext();
     const [error, setError] = useState(null);
 
-    const login = async (email, password) => {
+    const login = async () => {
         setError(null)
-
         const response = await fetch('/auth/google' 
-            // , {
-            // method: 'POST',
-            // headers: {'Content-Type': 'application/json'},
+            , {
+            method: 'POST',
+            credentials: 'include',
+            headers: {'Content-Type': 'application/json'},
             // body: JSON.stringify({ email, password })
-            // }
+            }
         )
-        const json = await response.json()
-
+        const json = await response.json();
+        console.log(json);
         if (!response.ok) {
           setError(json.error)
         }
         if (response.ok) {
           // save the user in browser
           localStorage.setItem('user', JSON.stringify(json))
+
+          console.log('useLogin.js was called');
 
           // update auth context
           dispatch({type: 'LOGIN', payload: json})

@@ -1,8 +1,10 @@
 import React from "react";
 import { useEffect,useState } from "react";
 import { Link } from 'react-router-dom';
+import { useAuthContext } from "../../hooks/useAuthContext";
 
-const Nav = (user) => {
+const Nav = () => {
+    const {user} = useAuthContext()
 
     return (
         <nav>

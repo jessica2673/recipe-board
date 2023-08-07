@@ -7,7 +7,9 @@ const Home = () => {
 
     useEffect(() => {
         const fetchRecipe = async () => {
-            const response = await fetch('/api')
+            const response = await fetch('/api', {
+                headers: {'Content-Type': 'application/json'},
+            })
             const json = await response.json()
             if (response.ok) {
                 setRecipes(json)
