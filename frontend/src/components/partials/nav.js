@@ -1,10 +1,22 @@
 import React from "react";
-import { useEffect,useState } from "react";
+import axios from "axios";
 import { Link } from 'react-router-dom';
 import { useAuthContext } from "../../hooks/useAuthContext";
 
 const Nav = () => {
     const {user} = useAuthContext()
+    const { dispatch } = useAuthContext();
+
+    const logOutUser = async () => {
+        const response = await axios
+            .get("http://localhost:4000/auth/logout", { withCredentials: true })
+            .catch((err) => {
+                console.log(err);
+            });
+        if (response) {
+            dispatch({type: 'LOGOUT'})
+        }
+    }
 
     return (
         <nav>
@@ -18,7 +30,7 @@ const Nav = () => {
                 :
                     <>
                         <Link to="/profile" ><img id="nav-img" src="<%= user.thumbnail %>" alt="image"/></Link>
-                        <li><Link to="/auth/logout">Logout</Link></li>
+                        <li><button onClick={logOutUser}>Logout</button></li>
                     </>
                 }
             </ul>

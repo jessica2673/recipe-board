@@ -54,7 +54,6 @@ passport.use(
         callbackURL: '/auth/google/redirect',
         passReqToCallback: true,
     }, (accessToken, refreshToken, profile, done) => {
-        console.log('in google strategy')
         User.findOne({googleId: profile.id}).then((currentUser) => {
             if (currentUser) {
                 done(null, currentUser);
@@ -81,6 +80,7 @@ passport.use(
         await console.log("profile", profile);
         await User.findOne({githubId: profile.id}).then((currentUser) => {
             if (currentUser) {
+                console.log("profile", profile);
                 done(null, currentUser);
             } else {
                 new User({

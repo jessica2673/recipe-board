@@ -6,6 +6,4 @@ export function LoginSuccess() {
       window.close();
     }, 1000);
   }, []);
-
-  return <div>Thanks for loggin in!</div>;
 }

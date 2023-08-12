@@ -1,10 +1,11 @@
-import { useState } from "react"
 import { useLogin } from "../hooks/useLogin"
 import { Link } from 'react-router-dom';
 import axios from "axios";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const Login = () => {
     const {login, error} = useLogin()
+    const { dispatch } = useAuthContext();
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -18,7 +19,13 @@ const Login = () => {
         .catch((err) => {
             console.log(err);
         });
-        console.log(response)
+        console.log("response:", response)
+
+        if (response && response.data) {
+            localStorage.setItem('user', JSON.stringify(response.data))
+            await dispatch({type: 'LOGIN', payload: response.data})
+            await console.log('logged in: ', localStorage.getItem('user'))
+        }
     }
 
     const redirectToGithubSSO = async () => {
@@ -33,7 +40,7 @@ const Login = () => {
         if (newWindow) {
             timer = setInterval(() => {
                 if (newWindow.closed) {
-                  console.log("Yay we're authenticated");
+                  console.log("window closed");
                   fetchAuthUser();
                   if (timer) clearInterval(timer);
                 }

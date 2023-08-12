@@ -6,7 +6,6 @@ const successLoginURL = "http://localhost:3000/login/success"
 const errorLoginURL = "http://localhost:3000/login/error"
 
 router.get("/user", (req, res) => {
-  console.log(req.user);
   res.json(req.user);
 });
 
@@ -18,6 +17,7 @@ router.get('/login', (req, res) => {
 
 // logout
 router.get('/logout', function(req, res, next){
+  console.log('logout')
   req.logout();
   res.redirect('/api');
 });
@@ -46,11 +46,10 @@ router.get('/github', passport.authenticate('github', {
 
 router.get('/github/redirect', passport.authenticate('github', {
   failureRedirect: errorLoginURL,
-    successRedirect: successLoginURL,
+  successRedirect: successLoginURL,
 }), (req, res) => {
   console.log('authenticated: ', req.user)
-  
-  res.send("Thank you for signing in!");
+  res.redirect('/api')
 });
 
 module.exports = router;
