@@ -30,7 +30,6 @@ app.use(passport.session());
 
 app.use(cors({
     origin: "http://localhost:3000",
-    methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
 );
@@ -52,7 +51,8 @@ passport.use(
     new GoogleStrategy({
         clientID: keys.google.clientID,
         clientSecret: keys.google.clientSecret,
-        callbackURL: '/auth/google/redirect'
+        callbackURL: '/auth/google/redirect',
+        passReqToCallback: true,
     }, (accessToken, refreshToken, profile, done) => {
         console.log('in google strategy')
         User.findOne({googleId: profile.id}).then((currentUser) => {
@@ -76,9 +76,10 @@ passport.use(
     new GitHubStrategy({
         clientID: keys.github.clientID,
         clientSecret: keys.github.clientSecret,
-        callbackURL: '/auth/github/redirect'
-    }, (accessToken, refreshToken, profile, done) => {
-        User.findOne({githubId: profile.id}).then((currentUser) => {
+        callbackURL: 'http://localhost:4000/auth/github/redirect',
+    }, async (accessToken, refreshToken, profile, done) => {
+        await console.log("profile", profile);
+        await User.findOne({githubId: profile.id}).then((currentUser) => {
             if (currentUser) {
                 done(null, currentUser);
             } else {
@@ -96,6 +97,7 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
+    console.log('serializing')
     done(null, user.id);
 });
 

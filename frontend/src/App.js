@@ -5,6 +5,7 @@ import Nav from './components/partials/nav';
 import Footer from './components/partials/footer';
 // import Header from './components/partials/header';
 import axios from 'axios'
+import { LoginSuccess } from './components/LoginSucess';
 
 import About from './components/recipe/about';
 import CreateRecipe from './components/recipe/createRecipe';
@@ -26,8 +27,9 @@ function App() {
           <Route path="/api/about" element={<About />}/>
           <Route path="/api/create" element={<CreateRecipe />} />
           <Route path="/auth/login" element={<Login />} />
-          {/* <Route path="/auth/google" /> */}
-          <Route path="" element={<ErrorPage />} />
+          {/* <Route path="/auth/github" element={<Home />} /> */}
+          <Route exact path="/login/success" component={<LoginSuccess />} />
+          <Route path="*" element={<ErrorPage />} />
         </Routes>
         <Footer />
       </BrowserRouter>
