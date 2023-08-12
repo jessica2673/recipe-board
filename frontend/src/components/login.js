@@ -1,17 +1,9 @@
-import { useLogin } from "../hooks/useLogin"
 import { Link } from 'react-router-dom';
 import axios from "axios";
 import { useAuthContext } from "../hooks/useAuthContext";
 
 const Login = () => {
-    const {login, error} = useLogin()
     const { dispatch } = useAuthContext();
-
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-
-        await login()
-    }
 
     const fetchAuthUser = async () => {
         const response = await axios
@@ -26,6 +18,26 @@ const Login = () => {
             await dispatch({type: 'LOGIN', payload: response.data})
             await console.log('logged in: ', localStorage.getItem('user'))
         }
+    }
+
+    const redirectToGoogleSSO = async () =>{
+        let timer = null;
+        const loginURL = "http://localhost:4000/auth/google";
+        const newWindow = window.open(
+            loginURL,
+          "_blank",
+          "width=500,height=600",
+        );
+    
+        if (newWindow) {
+            timer = setInterval(() => {
+                if (newWindow.closed) {
+                  console.log("window closed");
+                  fetchAuthUser();
+                  if (timer) clearInterval(timer);
+                }
+            }, 500);
+        };
     }
 
     const redirectToGithubSSO = async () => {
@@ -44,9 +56,9 @@ const Login = () => {
                   fetchAuthUser();
                   if (timer) clearInterval(timer);
                 }
-              }, 500);
-          };
-        }
+            }, 500);
+        };
+    }
 
     return (
         <div>
@@ -55,7 +67,7 @@ const Login = () => {
                 <header>
                     <h1>Login using:</h1>
                 </header>
-                <div className="loginLinkExt"><button onClick={handleSubmit} className="loginLink">Google+</button></div>
+                <div className="loginLinkExt"><button onClick={redirectToGoogleSSO} className="loginLink">Google+</button></div>
                 <div className="loginLinkExt"><button onClick={redirectToGithubSSO} className="loginLink">GitHub</button></div>
             </div>
         </div>

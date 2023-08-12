@@ -6,4 +6,6 @@ export function LoginSuccess() {
       window.close();
     }, 1000);
   }, []);
+
+  return <div>Login successful!</div>;
 }

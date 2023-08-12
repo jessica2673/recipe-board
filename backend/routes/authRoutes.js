@@ -22,34 +22,31 @@ router.get('/logout', function(req, res, next){
   res.redirect('/api');
 });
 
-router.get('/test', (req, res) => {
-  res.redirect('/auth/next');
-  // res.json('works!');
-})
-
-router.get('/next',(req, res) =>{
-  res.json('works!');
-})
-
 router.get('/google', passport.authenticate('google', {
-    scope: ['sprofile', 'email']
+    scope: ['profile', 'email']
 }));
 
-router.get('/google/redirect', passport.authenticate('google', {
-  successRedirect : '/api',
-  failureRedirect : '/'
-}));
+router.get('/google/redirect', passport.authenticate('google', 
+  {
+    failureRedirect: errorLoginURL,
+    successRedirect: successLoginURL,
+  }), 
+  (req, res) => {
+    console.log('authenticated: ', req.user)
+    res.redirect('/api')
+});
 
 router.get('/github', passport.authenticate('github', {
   scope: ['profile']
 }));
 
-router.get('/github/redirect', passport.authenticate('github', {
-  failureRedirect: errorLoginURL,
-  successRedirect: successLoginURL,
-}), (req, res) => {
-  console.log('authenticated: ', req.user)
-  res.redirect('/api')
+router.get('/github/redirect', passport.authenticate('github', 
+  {
+    failureRedirect: errorLoginURL,
+    successRedirect: successLoginURL,
+  }), (req, res) => {
+    console.log('authenticated: ', req.user)
+    res.redirect('/api')
 });
 
 module.exports = router;

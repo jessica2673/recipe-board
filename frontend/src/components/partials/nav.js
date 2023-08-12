@@ -14,6 +14,8 @@ const Nav = () => {
                 console.log(err);
             });
         if (response) {
+            console.log(response)
+            localStorage.removeItem('user')
             dispatch({type: 'LOGOUT'})
         }
     }

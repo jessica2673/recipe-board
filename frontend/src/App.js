@@ -27,7 +27,6 @@ function App() {
           <Route path="/api/about" element={<About />}/>
           <Route path="/api/create" element={<CreateRecipe />} />
           <Route path="/auth/login" element={<Login />} />
-          {/* <Route path="/auth/github" element={<Home />} /> */}
           <Route exact path="/login/success" element={<LoginSuccess />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>

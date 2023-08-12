@@ -31,6 +31,7 @@ app.use(passport.session());
 app.use(cors({
     origin: "http://localhost:3000",
     credentials: true,
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   })
 );
 
@@ -47,14 +48,18 @@ app.use(express.static('public'));
 app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
 
+app.use((req, res, next) => {
+    res.append('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+    next();
+});
+
 passport.use(
     new GoogleStrategy({
         clientID: keys.google.clientID,
         clientSecret: keys.google.clientSecret,
-        callbackURL: '/auth/google/redirect',
-        passReqToCallback: true,
-    }, (accessToken, refreshToken, profile, done) => {
-        User.findOne({googleId: profile.id}).then((currentUser) => {
+        callbackURL: 'http://localhost:4000/auth/google/redirect',
+    }, async (accessToken, refreshToken, profile, done) => {
+        await User.findOne({googleId: profile.id}).then((currentUser) => {
             if (currentUser) {
                 done(null, currentUser);
             } else {
