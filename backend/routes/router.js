@@ -48,7 +48,7 @@ router.get('/recipes', recipeController.recipe_home_redirect)
 
 router.get('/about', recipeController.recipe_about);
 
-router.post('/recipes', upload.single('imageName'), recipeController.post_new_recipe);
+router.put('/recipes', upload.single('file'), recipeController.post_new_recipe);
 
 router.get('/create', checkUserCreate, recipeController.recipe_create_form);
 

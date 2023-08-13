@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Recipe = require('../models/recipeModel');
 const keys = require('../config/keys');
+
 // for image upload
 const multer = require('multer');
 const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
@@ -47,16 +48,17 @@ const recipe_home = async (req, res) => {
 }
 
 const recipe_home_redirect = (req, res)=> {
-    res.redirect('/');
+    res.redirect('/api');
 }
 
 const recipe_about = (req, res) => {
-    res.render('./recipe/about', { title: "About" });
+    res.render('/api/recipe/about', { title: "About" });
 }
 
 const post_new_recipe = async (req, res) => {
+    console.log('post_new_recipe')
     const recipe = await new Recipe(req.body);
-    await console.log(req.file);
+
     if (req.user) {
         recipe.creatorId = req.user._id;
     }
@@ -73,13 +75,11 @@ const post_new_recipe = async (req, res) => {
         recipe.imageName = imageName;
         const command = new PutObjectCommand(params);
         await s3.send(command);
-        await console.log("first");
     }
 
     await recipe.save()
         .then((result) => {
-            console.log("second");
-            res.redirect('/recipes');
+            res.redirect('/api')
         })
         .catch((err) => {
             console.log(err);
@@ -88,7 +88,8 @@ const post_new_recipe = async (req, res) => {
 }
 
 const recipe_create_form = (req, res) => {
-    res.render('./recipe/createRecipe', { title: "Create", user: req.user });
+    console.log('recipe_create_form')
+    res.render('/api/recipe/createRecipe', { title: "Create", user: req.user });
 }
 
 const get_single_recipe = async (req, res) => {
@@ -112,10 +113,11 @@ const get_single_recipe = async (req, res) => {
         const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
         found.imageUrl = await url;
     }
-    res.render('./recipe/details', { title: found.recipe, recipe: found, user: req.user });
+    res.render('./api/recipe/details', { title: found.recipe, recipe: found, user: req.user });
 }
 
 const get_recipe_update = (req, res) => {
+    console.log('get_recipe_update')
     const id = req.params.id;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -132,6 +134,7 @@ const get_recipe_update = (req, res) => {
 }
 
 const update_recipe = async (req, res) => {
+    console.log('update_recipe')
     // if an image was uploaded
     if (req.file) {
         const imageBefore = await Recipe.findById(req.params.id);
@@ -192,6 +195,7 @@ const update_recipe = async (req, res) => {
 }
 
 const delete_recipe = (req, res) => {
+    console.log('delete_recipe')
     const id = req.params.id;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -200,7 +204,7 @@ const delete_recipe = (req, res) => {
 
     Recipe.findByIdAndDelete(id)
         .then((result) => {
-            res.json({ redirect: '/recipes' })
+            res.json({ redirect: '/api' })
         })
         .catch((err) => {
             console.log(err);
@@ -208,6 +212,7 @@ const delete_recipe = (req, res) => {
 }
 
 const delete_image = async (req, res) => {
+    console.log('delete_image')
     const id = req.params.id;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -232,7 +237,7 @@ const delete_image = async (req, res) => {
             $unset: {caption: "", imageName: ""}
         });
     
-    await res.redirect('/recipes/' + id);
+    await res.redirect('/api/recipes/' + id);
 }
 
 module.exports = {
