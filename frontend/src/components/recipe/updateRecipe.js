@@ -1,58 +1,114 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { useAuthContext } from "../../hooks/useAuthContext.js";
 
 const UpdateRecipe = () => {
+    const location = useLocation();
+    const { givenRecipe } = location.state
+    const { user } = useAuthContext()
+
+    const [recipe, setRecipe] = useState('')
+    const [author, setAuthor] = useState('')
+    const [time, setTime] = useState('')
+    const [description, setDescription] = useState('')
+    const [ingredients, setIngredients] = useState('')
+    const [instructions, setInstructions] = useState('')
+    const [file, setFile] = useState({})
+    const [caption, setCaption] = useState('')
+
+    const uploadData = async (formData)=>{
+        try {
+            const response = await fetch(("/api/recipes/update/" + givenRecipe._id), {
+              method: "PATCH",
+              body: formData,
+            });
+            const json = await response.json();
+
+            if (!response.ok) {
+                console.log(json.error)
+            }
+            if (response.ok) {
+                setRecipe('')
+                setAuthor('')
+                setTime('')
+                setDescription('')
+                setIngredients('')
+                setInstructions('')
+                setFile({})
+                setCaption('')
+            }
+          } catch (error) {
+            console.error("Error:", error);
+          }
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        const formData = new FormData();
+
+        formData.append("recipe", recipe);
+        formData.append("author", author);
+        formData.append("time", time);
+        formData.append("description", description);
+        formData.append("ingredients", ingredients);
+        formData.append("instructions", instructions);
+        formData.append("caption", caption);
+        formData.append("file", file);
+
+        await uploadData(formData);
+    }
+    
     return (
-        <body>
-            {/* <div class="update-page">
-                <h1>{recipe.recipe}</h1>
+        <> {(user && givenRecipe) ?
+            <div className="update-page">
+                <h1>{givenRecipe.recipe}</h1>
 
-                <form action="/recipes/update/<%= id %>" method="POST" enctype="multipart/form-data">
+                <form action={"/api/recipes/update/" + givenRecipe._id} method="PATCH" encType="multipart/form-data" onSubmit={handleSubmit}>
                     <div>
-                        <label for="recipe">Recipe name:</label>
-                        <input type="text" id="recipe" name="recipe" value="<%= recipe.recipe %>" required></input>
-                    </div>
-                    
-                    <div>
-                        <label for="title">Author name:</label>
-                        <input type="text" id="author" name="author" value="<%= recipe.author %>" required> </input>   
+                        <label htmlFor="recipe">Recipe name:</label>
+                        <input type="text" id="recipe" name="recipe" defaultValue={givenRecipe.recipe} onChange={(e) => setRecipe(e.target.value)} required />
                     </div>
                     
                     <div>
-                        <label for="title">Time required (minutes):</label>
-                        <input type="text" id="time" name="time" value="<%= recipe.time %>" required></input>
-                    </div>
-
-                    <div class="input-textarea">
-                        <label for="description">Description:</label>
-                        <textarea name="description" id="description" required>{recipe.description}</textarea>            
-                    </div>
-
-                    <div class="input-textarea">
-                        <label for="body">Ingredients:</label>
-                        <textarea name="ingredients" id="ingredients" required>{recipe.ingredients}</textarea>
+                        <label htmlFor="title">Author name:</label>
+                        <input type="text" id="author" name="author" defaultValue={givenRecipe.author} onChange={(e) => setAuthor(e.target.value)} required />   
                     </div>
                     
-                    <div class="input-textarea">
-                        <label for="instructions">Instructions:</label>
-                        <textarea name="instructions" id="instructions" required>{recipe.instructions}</textarea>
+                    <div>
+                        <label htmlFor="title">Time required (minutes):</label>
+                        <input type="text" id="time" name="time" defaultValue={givenRecipe.time} onChange={(e) => setTime(e.target.value)} required />
+                    </div>
+
+                    <div className="input-textarea">
+                        <label htmlFor="description">Description:</label>
+                        <textarea name="description" id="description" defaultValue={givenRecipe.description} onChange={(e) => setDescription(e.target.value)} required />            
+                    </div>
+
+                    <div className="input-textarea">
+                        <label htmlFor="body">Ingredients:</label>
+                        <textarea name="ingredients" id="ingredients" defaultValue={givenRecipe.ingredients} onChange={(e) => setIngredients(e.target.value)} required />
                     </div>
                     
-                    {(recipe.imageName) &&
+                    <div className="input-textarea">
+                        <label htmlFor="instructions">Instructions:</label>
+                        <textarea name="instructions" id="instructions" defaultValue={givenRecipe.instructions} onChange={(e) => setInstructions(e.target.value)} required />
+                    </div>
+                    
+                    {(givenRecipe.imageName) &&
                         <>
-                            <img src="<%= recipe.imageUrl %>" alt="image here" class="recipeImage"></img>
-                            <caption>{recipe.caption}</caption>
+                            <img src={givenRecipe.imageUrl} alt="image here" className="recipeImage" />
                         </>}
 
 
-                    <input type="file" name="imageName" />
-                    <label for="caption">Caption:</label>
-                    <input type="text" id="caption" name="caption"/>
+                    <input type="file" name="imageName" onChange={(e) => setFile(e.target.files[0])}/>
+                    <label htmlFor="caption">Caption:</label>
+                    <input type="text" id="caption" name="caption" defaultValue={givenRecipe.caption} onChange={(e) => setCaption(e.target.value)} />
 
                     <button>Update</button>
-                </form> */}
-            {/* </div> */}
-        </body>
+                </form>
+            </div> 
+            : <Link to="/auth/login" />}
+        </>
     )
 }
 

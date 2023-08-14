@@ -53,7 +53,7 @@ const CreateRecipe = () => {
         await console.log('file: ', file)
 
         await uploadData(formData);
-      }
+    }
 
     return (
         <div className="create-page">

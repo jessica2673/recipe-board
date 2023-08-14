@@ -10,6 +10,8 @@ import { LoginSuccess } from './components/LoginSucess';
 import About from './components/recipe/about';
 import CreateRecipe from './components/recipe/createRecipe';
 import Home from './components/recipe/home';
+import Details from './components/recipe/details'
+import UpdateRecipe from './components/recipe/updateRecipe';
 
 import { useAuthContext } from './hooks/useAuthContext';
 import Login from './components/login';
@@ -27,6 +29,8 @@ function App() {
           <Route path="/api/about" element={<About />}/>
           <Route path="/api/create" element={ user ? <CreateRecipe /> : <Login/> } />
           <Route path="/auth/login" element={<Login />} />
+          <Route path="api/recipes/:id" element={<Details />} />
+          <Route path="/api/recipes/update/:id" element={<UpdateRecipe />} />
           <Route exact path="/login/success" element={<LoginSuccess />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>

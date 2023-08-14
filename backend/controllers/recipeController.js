@@ -113,7 +113,7 @@ const get_single_recipe = async (req, res) => {
         const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
         found.imageUrl = await url;
     }
-    res.render('./api/recipe/details', { title: found.recipe, recipe: found, user: req.user });
+    res.json(found);
 }
 
 const get_recipe_update = (req, res) => {

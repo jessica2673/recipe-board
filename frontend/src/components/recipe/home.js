@@ -25,7 +25,7 @@ const Home = () => {
                 <h1>What's Cooking</h1>
                 {recipes.map((recipe) => (
                 <div className="recipe" key={recipe._id}>
-                    <Link className="home-recipe-title" to={"/recipes/" + recipe._id.toString()}><h2>{recipe.recipe}</h2></Link>
+                    <Link className="home-recipe-title" to={'/api/recipes/' + recipe._id.toString()} state={{ recipe: recipe}}><h2>{recipe.recipe}</h2></Link>
                     <p className="time-posted">Date posted: {recipe.createdAt}</p>
                     <div className="home-short-info">
                         <p>Author: {recipe.author}</p>

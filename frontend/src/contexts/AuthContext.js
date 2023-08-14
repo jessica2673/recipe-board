@@ -1,4 +1,7 @@
 import { createContext, useReducer, useEffect } from 'react'
+// createContext = require('react')
+// useReducer= require('react')
+// useEffect = require('react')
 
 export const AuthContext = createContext()
 
@@ -30,8 +33,6 @@ export const AuthContextProvider = ({ children }) => {
     }
   }, [])
 
-  console.log('AuthContext state:', state)
-  
   return (
     <AuthContext.Provider value={{ ...state, dispatch }}>
       { children }
