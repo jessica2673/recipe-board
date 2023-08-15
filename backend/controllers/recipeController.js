@@ -134,8 +134,8 @@ const get_recipe_update = (req, res) => {
 }
 
 const update_recipe = async (req, res) => {
-    console.log('update_recipe')
     // if an image was uploaded
+    console.log('updated')
     if (req.file) {
         const imageBefore = await Recipe.findById(req.params.id);
         
@@ -177,7 +177,7 @@ const update_recipe = async (req, res) => {
             }
         );
 
-        await res.redirect('/');
+        await res.redirect(303, '/api');
     } else {
         await Recipe.findOneAndUpdate(
             {_id: req.params.id},
@@ -190,11 +190,11 @@ const update_recipe = async (req, res) => {
                 instructions: req.body.instructions,
             }
         );
-        await res.redirect('/');
+        await res.redirect(303, '/api')
     }
 }
 
-const delete_recipe = (req, res) => {
+const delete_recipe = async (req, res) => {
     console.log('delete_recipe')
     const id = req.params.id;
 
@@ -202,7 +202,18 @@ const delete_recipe = (req, res) => {
         return res.status(404);
     }
 
-    Recipe.findByIdAndDelete(id)
+    const found = await Recipe.findById(id);
+    
+    // delete image from bucket
+    const deleteParams = {
+        Bucket: bucketName,
+        Key: found.imageName,
+    }
+
+    const deleteCommand = await new DeleteObjectCommand(deleteParams);
+    await s3.send(deleteCommand);
+
+    await Recipe.findByIdAndDelete(id)
         .then((result) => {
             res.json({ redirect: '/api' })
         })
@@ -237,7 +248,7 @@ const delete_image = async (req, res) => {
             $unset: {caption: "", imageName: ""}
         });
     
-    await res.redirect('/api/recipes/' + id);
+    await res.redirect('/api/recipes/' + id.toString());
 }
 
 module.exports = {

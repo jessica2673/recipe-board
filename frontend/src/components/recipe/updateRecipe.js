@@ -1,25 +1,41 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, Navigate } from "react-router-dom";
 import { useAuthContext } from "../../hooks/useAuthContext.js";
 
 const UpdateRecipe = () => {
     const location = useLocation();
-    const { givenRecipe } = location.state
+    let render = true
+    let givenRecipe = {}
+    if (!location.state) {
+        givenRecipe = {
+            recipe: "",
+            author: "",
+            time: "",
+            description: "",
+            ingredients: "",
+            instructions: "",
+            caption: "",
+        }
+        render = false
+    } else {
+        ({ givenRecipe } = location.state)
+    }
+
     const { user } = useAuthContext()
 
-    const [recipe, setRecipe] = useState('')
-    const [author, setAuthor] = useState('')
-    const [time, setTime] = useState('')
-    const [description, setDescription] = useState('')
-    const [ingredients, setIngredients] = useState('')
-    const [instructions, setInstructions] = useState('')
+    const [recipe, setRecipe] = useState(givenRecipe.recipe)
+    const [author, setAuthor] = useState(givenRecipe.author)
+    const [time, setTime] = useState(givenRecipe.time)
+    const [description, setDescription] = useState(givenRecipe.description)
+    const [ingredients, setIngredients] = useState(givenRecipe.ingredients)
+    const [instructions, setInstructions] = useState(givenRecipe.instructions)
     const [file, setFile] = useState({})
-    const [caption, setCaption] = useState('')
+    const [caption, setCaption] = useState(givenRecipe.caption)
 
     const uploadData = async (formData)=>{
         try {
             const response = await fetch(("/api/recipes/update/" + givenRecipe._id), {
-              method: "PATCH",
+              method: "PUT",
               body: formData,
             });
             const json = await response.json();
@@ -27,16 +43,7 @@ const UpdateRecipe = () => {
             if (!response.ok) {
                 console.log(json.error)
             }
-            if (response.ok) {
-                setRecipe('')
-                setAuthor('')
-                setTime('')
-                setDescription('')
-                setIngredients('')
-                setInstructions('')
-                setFile({})
-                setCaption('')
-            }
+
           } catch (error) {
             console.error("Error:", error);
           }
@@ -55,15 +62,17 @@ const UpdateRecipe = () => {
         formData.append("caption", caption);
         formData.append("file", file);
 
+        await console.log('file: ', file)
+
         await uploadData(formData);
     }
     
     return (
-        <> {(user && givenRecipe) ?
+        <> {(user && givenRecipe && render) ?
             <div className="update-page">
                 <h1>{givenRecipe.recipe}</h1>
 
-                <form action={"/api/recipes/update/" + givenRecipe._id} method="PATCH" encType="multipart/form-data" onSubmit={handleSubmit}>
+                <form action={"/api/recipes/update/" + givenRecipe._id} method="PUT" encType="multipart/form-data" onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor="recipe">Recipe name:</label>
                         <input type="text" id="recipe" name="recipe" defaultValue={givenRecipe.recipe} onChange={(e) => setRecipe(e.target.value)} required />
@@ -107,7 +116,7 @@ const UpdateRecipe = () => {
                     <button>Update</button>
                 </form>
             </div> 
-            : <Link to="/auth/login" />}
+            : <Navigate to="/auth/login" />}
         </>
     )
 }

@@ -1,7 +1,4 @@
 import { createContext, useReducer, useEffect } from 'react'
-// createContext = require('react')
-// useReducer= require('react')
-// useEffect = require('react')
 
 export const AuthContext = createContext()
 

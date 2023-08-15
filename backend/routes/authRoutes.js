@@ -16,10 +16,15 @@ router.get('/login', (req, res) => {
 });
 
 // logout
-router.get('/logout', function(req, res, next){
-  console.log('logout')
+router.get('/logout', function(req, res, next) {
   req.logout();
   res.redirect('/api');
+});
+
+router.get('/profile', async (req, res) => {
+  // res.render('profile', { title: "Profile", user: req.user });
+  console.log(req.user);
+  await res.render('./profile');
 });
 
 router.get('/google', passport.authenticate('google', {
@@ -32,7 +37,6 @@ router.get('/google/redirect', passport.authenticate('google',
     successRedirect: successLoginURL,
   }), 
   (req, res) => {
-    console.log('authenticated: ', req.user)
     res.redirect('/api')
 });
 
@@ -45,7 +49,6 @@ router.get('/github/redirect', passport.authenticate('github',
     failureRedirect: errorLoginURL,
     successRedirect: successLoginURL,
   }), (req, res) => {
-    console.log('authenticated: ', req.user)
     res.redirect('/api')
 });
 

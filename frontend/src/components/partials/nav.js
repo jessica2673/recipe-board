@@ -31,7 +31,7 @@ const Nav = () => {
                     <li><Link to="/auth/login">Login</Link></li>
                 :
                     <>
-                        <Link to="/profile" ><img id="nav-img" src={user.thumbnail} alt="image"/></Link>
+                        <Link to="/auth/profile"><img id="nav-img" src={user.thumbnail}/></Link>
                         <li><button onClick={logOutUser}>Logout</button></li>
                     </>
                 }

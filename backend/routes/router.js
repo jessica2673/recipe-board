@@ -9,12 +9,13 @@ const upload = multer({ storage: storage });
 
 // verify that user can edit selected recipe
 const checkUser = async (req, res, next) => {
-    console.log(req.params)
-    if (!user) {
+    // req.params contains the id of the object
+
+    if (!req.user) {
         // if user is not logged in, redirect to login
         res.redirect('/auth/login');
     } else {
-        const userId = await user._id.toString();
+        const userId = await req.user._id.toString();
         // true if user id matches recipe creator id
         let callNext = Recipe.findById(req.params.id)
             .then(found => {
@@ -35,7 +36,7 @@ const checkUser = async (req, res, next) => {
 };
 
 const checkUserCreate = async (req, res, next) => {
-    if (!user) {
+    if (!req.user) {
         // if user is not logged in, redirect to login
         res.redirect('/auth/login');
     } else {
@@ -57,11 +58,11 @@ router.get('/recipes/:id', recipeController.get_single_recipe);
 
 router.get('/recipes/update/:id', checkUser, recipeController.get_recipe_update);
 
-router.patch('/recipes/update/:id', checkUser, upload.single('imageName'), recipeController.update_recipe)
+router.put('/recipes/update/:id', upload.single('file'), recipeController.update_recipe)
 
-router.delete('/recipes/:id', checkUser, recipeController.delete_recipe);
+router.delete('/recipes/:id', recipeController.delete_recipe);
 
-router.get('/recipes/delete/image/:id', checkUser, recipeController.delete_image);
+router.get('/recipes/delete/image/:id', recipeController.delete_image);
 
 module.exports = router;
 

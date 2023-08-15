@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { Navigate } from "react-router";
 
 const CreateRecipe = () => {
+    const { user } = useAuthContext()
     const [recipe, setRecipe] = useState('')
     const [author, setAuthor] = useState('')
     const [time, setTime] = useState('')
@@ -56,92 +58,95 @@ const CreateRecipe = () => {
     }
 
     return (
-        <div className="create-page">
-            <h1>Create A New Recipe</h1>
+        <> {(user) ?
+            <div className="create-page">
+                <h1>Create A New Recipe</h1>
 
-            <form id="form" action="/api" method="PUT" encType="multipart/form-data" onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="recipe">Recipe name:</label>
-                    <input 
-                        type="text"
-                        id="recipe"
-                        name="recipe" 
-                        value={recipe}
-                        onChange={(e) => setRecipe(e.target.value)}
+                <form id="form" action="/api" method="PUT" encType="multipart/form-data" onSubmit={handleSubmit}>
+                    <div>
+                        <label htmlFor="recipe">Recipe name:</label>
+                        <input 
+                            type="text"
+                            id="recipe"
+                            name="recipe" 
+                            value={recipe}
+                            onChange={(e) => setRecipe(e.target.value)}
+                            required></input>
+                    </div>
+                    
+                    <div>
+                        <label htmlFor="title">Author name:</label>
+                        <input 
+                            type="text"
+                            id="author"
+                            name="author"
+                            value={author}
+                            onChange={(e) => setAuthor(e.target.value)}
+                            required></input>
+                    </div>
+                    
+                    <div>
+                        <label htmlFor="title">Time required (minutes):</label>
+                        <input
+                            type="text"
+                            id="time"
+                            name="time"
+                            value={time}
+                            onChange={(e) => setTime(e.target.value)}
                         required></input>
-                </div>
-                
-                <div>
-                    <label htmlFor="title">Author name:</label>
-                    <input 
-                        type="text"
-                        id="author"
-                        name="author"
-                        value={author}
-                        onChange={(e) => setAuthor(e.target.value)}
-                        required></input>
-                </div>
-                
-                <div>
-                    <label htmlFor="title">Time required (minutes):</label>
+                    </div>
+
+                    <div className="input-textarea">
+                        <label htmlFor="description">Description:</label>
+                        <textarea
+                            name="description"
+                            id="description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                        required></textarea>            
+                    </div>
+
+                    <div className="input-textarea">
+                        <label htmlFor="body">Ingredients:</label>
+                        <textarea
+                            name="ingredients"
+                            id="ingredients"
+                            value={ingredients}
+                            onChange={(e) => setIngredients(e.target.value)}
+                        required></textarea>
+                    </div>
+                    
+                    <div className="input-textarea">
+                        <label htmlFor="instructions">Instructions:</label>
+                        <textarea
+                            name="instructions"
+                            id="instructions"
+                            value={instructions}
+                            onChange={(e) => setInstructions(e.target.value)}
+                        required></textarea>
+                    </div>
+
+                    <input
+                        type="file"
+                        label='Image: '
+                        name="imageName"
+                        onChange={(e) => setFile(e.target.files[0])}
+                    />
+
+                    <label htmlFor="caption">Caption:</label>
                     <input
                         type="text"
-                        id="time"
-                        name="time"
-                        value={time}
-                        onChange={(e) => setTime(e.target.value)}
-                    required></input>
-                </div>
+                        id="caption"
+                        name="caption"
+                        value={caption}
+                        onChange={(e) => setCaption(e.target.value)}
+                    />
 
-                <div className="input-textarea">
-                    <label htmlFor="description">Description:</label>
-                    <textarea
-                        name="description"
-                        id="description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    required></textarea>            
-                </div>
-
-                <div className="input-textarea">
-                    <label htmlFor="body">Ingredients:</label>
-                    <textarea
-                        name="ingredients"
-                        id="ingredients"
-                        value={ingredients}
-                        onChange={(e) => setIngredients(e.target.value)}
-                    required></textarea>
-                </div>
-                
-                <div className="input-textarea">
-                    <label htmlFor="instructions">Instructions:</label>
-                    <textarea
-                        name="instructions"
-                        id="instructions"
-                        value={instructions}
-                        onChange={(e) => setInstructions(e.target.value)}
-                    required></textarea>
-                </div>
-
-                <input
-                    type="file"
-                    label='Image: '
-                    name="imageName"
-                    onChange={(e) => setFile(e.target.files[0])}
-                />
-
-                <label htmlFor="caption">Caption:</label>
-                <input
-                    type="text"
-                    id="caption"
-                    name="caption"
-                    value={caption}
-                    onChange={(e) => setCaption(e.target.value)}
-                />
-
-                <button id="submitBtn">Submit</button>
-            </form>
-        </div>
+                    <button id="submitBtn">Submit</button>
+                </form>
+            </div>
+            : <Navigate to='/auth/login' /> }
+        </>
     )
 }
 
