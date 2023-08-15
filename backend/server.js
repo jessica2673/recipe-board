@@ -3,7 +3,6 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const routes = require('./routes/router');
 const authRoutes = require('./routes/authRoutes');
-const profileRoutes = require('./routes/profileRoutes');
 const keys = require('./config/keys');
 const passport = require('passport');
 const session = require('express-session');
@@ -112,7 +111,6 @@ passport.deserializeUser((id, done) => {
     });
 });
 
-app.use('/profile', profileRoutes);
 app.use('/auth', authRoutes);
 app.use('/api', routes);
 

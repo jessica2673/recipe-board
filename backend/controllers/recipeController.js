@@ -56,7 +56,6 @@ const recipe_about = (req, res) => {
 }
 
 const post_new_recipe = async (req, res) => {
-    console.log('post_new_recipe')
     const recipe = await new Recipe(req.body);
 
     if (req.user) {
@@ -88,7 +87,6 @@ const post_new_recipe = async (req, res) => {
 }
 
 const recipe_create_form = (req, res) => {
-    console.log('recipe_create_form')
     res.render('/api/recipe/createRecipe', { title: "Create", user: req.user });
 }
 
@@ -117,7 +115,6 @@ const get_single_recipe = async (req, res) => {
 }
 
 const get_recipe_update = (req, res) => {
-    console.log('get_recipe_update')
     const id = req.params.id;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -135,7 +132,6 @@ const get_recipe_update = (req, res) => {
 
 const update_recipe = async (req, res) => {
     // if an image was uploaded
-    console.log('updated')
     if (req.file) {
         const imageBefore = await Recipe.findById(req.params.id);
         
@@ -195,7 +191,6 @@ const update_recipe = async (req, res) => {
 }
 
 const delete_recipe = async (req, res) => {
-    console.log('delete_recipe')
     const id = req.params.id;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -223,7 +218,6 @@ const delete_recipe = async (req, res) => {
 }
 
 const delete_image = async (req, res) => {
-    console.log('delete_image')
     const id = req.params.id;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {

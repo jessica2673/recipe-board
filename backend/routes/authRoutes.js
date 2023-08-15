@@ -11,7 +11,6 @@ router.get("/user", (req, res) => {
 
 // login
 router.get('/login', (req, res) => {
-    console.log('login called');
     res.render('./login', { title: 'Login' });
 });
 
@@ -22,8 +21,6 @@ router.get('/logout', function(req, res, next) {
 });
 
 router.get('/profile', async (req, res) => {
-  // res.render('profile', { title: "Profile", user: req.user });
-  console.log(req.user);
   await res.render('./profile');
 });
 
