@@ -46,6 +46,14 @@ nav > a {
     background-color: rgb(238, 172, 49);
 }
 
+#logout-btn {
+    outline: none;
+    border: none;
+    background-color: transparent;
+    margin: auto;
+    font-size: 1em;
+}
+
 #nav-options > li > a {
     text-decoration:none;
     color: black;
@@ -148,15 +156,17 @@ form > div {
     padding-bottom: 0.5em;
 }
 
-form > div > input, form > div > textarea {
+form > div > input, form > div > textarea, #caption {
     border: rgb(158, 153, 146) solid 1px;
     padding: 0.3em;
+    margin-left: 0.3em;
+    margin-right: 0.3em;
     border-radius: 3px;
     font-size: 0.8em;
     border-left-width: 5px;
 }
 
-form > div > input:focus, form > div > textarea:focus {
+form > div > input:focus, form > div > textarea:focus, #caption:focus {
     outline: none;
     border: rgb(243, 182, 69) solid 1px;
     border-left-width: 5px;

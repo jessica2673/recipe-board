@@ -1,22 +1,23 @@
 const express= require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const routes = require('./routes/router');
-const authRoutes = require('./routes/authRoutes');
-const keys = require('./config/keys');
 const passport = require('passport');
 const session = require('express-session');
-const cookieSession = require('cookie-session');
+// const cookieSession = require('cookie-session');
 const cors = require("cors")
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const GitHubStrategy = require('passport-github2').Strategy;
-// const LocalStrategy = require('passport-local').Strategy;
+
+const routes = require('./routes/router');
+const authRoutes = require('./routes/authRoutes');
+const keys = require('./config/keys');
 const User = require('./models/userModel');
 
 const app = express();
+// parse incoming requests with JSON
 app.use(express.json());
 
-app.set('view engine', 'ejs');
+// app.set('view engine', 'ejs');
 
 app.use(session({
     secret: keys.session.cookieKey,

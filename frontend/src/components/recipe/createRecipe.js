@@ -71,6 +71,7 @@ const CreateRecipe = () => {
                             name="recipe" 
                             value={recipe}
                             onChange={(e) => setRecipe(e.target.value)}
+                            autocomplete="off"
                             required></input>
                     </div>
                     
@@ -82,6 +83,7 @@ const CreateRecipe = () => {
                             name="author"
                             value={author}
                             onChange={(e) => setAuthor(e.target.value)}
+                            autocomplete="off"
                             required></input>
                     </div>
                     
@@ -93,6 +95,7 @@ const CreateRecipe = () => {
                             name="time"
                             value={time}
                             onChange={(e) => setTime(e.target.value)}
+                            autocomplete="off"
                         required></input>
                     </div>
 
@@ -103,6 +106,7 @@ const CreateRecipe = () => {
                             id="description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
+                            autocomplete="off"
                         required></textarea>            
                     </div>
 
@@ -113,6 +117,7 @@ const CreateRecipe = () => {
                             id="ingredients"
                             value={ingredients}
                             onChange={(e) => setIngredients(e.target.value)}
+                            autocomplete="off"
                         required></textarea>
                     </div>
                     
@@ -123,6 +128,7 @@ const CreateRecipe = () => {
                             id="instructions"
                             value={instructions}
                             onChange={(e) => setInstructions(e.target.value)}
+                            autocomplete="off"
                         required></textarea>
                     </div>
 
@@ -133,13 +139,14 @@ const CreateRecipe = () => {
                         onChange={(e) => setFile(e.target.files[0])}
                     />
 
-                    <label htmlFor="caption">Caption:</label>
+                    <label htmlFor="caption" id="caption-label">Caption:</label>
                     <input
                         type="text"
                         id="caption"
                         name="caption"
                         value={caption}
                         onChange={(e) => setCaption(e.target.value)}
+                        autocomplete="off"
                     />
 
                     <button id="submitBtn">Submit</button>

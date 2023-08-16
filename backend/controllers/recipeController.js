@@ -58,9 +58,6 @@ const recipe_about = (req, res) => {
 const post_new_recipe = async (req, res) => {
     const recipe = await new Recipe(req.body);
 
-    if (req.user) {
-        recipe.creatorId = req.user._id;
-    }
     if (req.file){
         const buffer = await sharp(req.file.buffer).resize({width: 1000, height: 2000, fit: "contain"}).toBuffer();
 
@@ -83,7 +80,6 @@ const post_new_recipe = async (req, res) => {
         .catch((err) => {
             console.log(err);
         })
-    
 }
 
 const recipe_create_form = (req, res) => {
@@ -199,14 +195,16 @@ const delete_recipe = async (req, res) => {
 
     const found = await Recipe.findById(id);
     
-    // delete image from bucket
-    const deleteParams = {
-        Bucket: bucketName,
-        Key: found.imageName,
-    }
+    if(found.imageName) {
+        // delete image from bucket
+        const deleteParams = {
+            Bucket: bucketName,
+            Key: found.imageName,
+        }
 
-    const deleteCommand = await new DeleteObjectCommand(deleteParams);
-    await s3.send(deleteCommand);
+        const deleteCommand = await new DeleteObjectCommand(deleteParams);
+        await s3.send(deleteCommand);
+    }
 
     await Recipe.findByIdAndDelete(id)
         .then((result) => {
@@ -242,7 +240,7 @@ const delete_image = async (req, res) => {
             $unset: {caption: "", imageName: ""}
         });
     
-    await res.redirect('/api/recipes/' + id.toString());
+    await res.redirect('/api');
 }
 
 module.exports = {

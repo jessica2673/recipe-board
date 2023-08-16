@@ -32,7 +32,7 @@ const Nav = () => {
                 :
                     <>
                         <Link to="/auth/profile"><img id="nav-img" src={user.thumbnail}/></Link>
-                        <li><button onClick={logOutUser}>Logout</button></li>
+                        <li><button id="logout-btn" onClick={logOutUser}>Logout</button></li>
                     </>
                 }
             </ul>
