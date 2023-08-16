@@ -28,7 +28,7 @@ const recipe_home = async (req, res) => {
     foundRecipes = await Recipe.find();
     
     if (!foundRecipes) {
-        console.log("No recipes found");  
+        console.log("No recipes found");
     }
 
     loadedImages = [];
@@ -58,6 +58,10 @@ const recipe_about = (req, res) => {
 const post_new_recipe = async (req, res) => {
     console.log('post_new_recipe')
     const recipe = await new Recipe(req.body);
+
+    if (req.user) {
+        recipe.creatorId = req.user._id;
+    }
 
     if (req.file){
         const buffer = await sharp(req.file.buffer).resize({width: 1000, height: 2000, fit: "contain"}).toBuffer();

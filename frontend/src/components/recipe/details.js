@@ -74,7 +74,7 @@ const Details = () => {
                 <p>Ingredients required: { givenRecipe.ingredients}</p>
                 <p>Instructions: { givenRecipe.instructions}</p>
                 
-                {(user && user._id == givenRecipe.creatorId)  && 
+                {(user && user._id === givenRecipe.creatorId)  && 
                     <>
                         <Link className="update" to={"/api/recipes/update/" + givenRecipe._id} state={{givenRecipe: givenRecipe}}>Update</Link>
                         <Link className="delete" onClick={deleteRecipeBtn} data-doc={givenRecipe._id}>Delete Recipe</Link>
