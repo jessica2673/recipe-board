@@ -1,5 +1,5 @@
 # recipe-board
-Built primarily using Node, Express, and Passport JS.
+Built primarily using MongoDB, Express, React, Node, and Passport JS.
 
 A recipe board where a user can post, edit, and delete their own recipes.
 Users can log in either with their Google or GitHub account to contribute recipes to the board. 
