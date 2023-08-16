@@ -10,6 +10,7 @@ const GitHubStrategy = require('passport-github2').Strategy;
 
 const routes = require('./routes/router');
 const authRoutes = require('./routes/authRoutes');
+const profileRoutes = require('./routes/profileRoutes')
 const keys = require('./config/keys');
 const User = require('./models/userModel');
 
@@ -112,6 +113,7 @@ passport.deserializeUser((id, done) => {
     });
 });
 
+app.use('/profile', profileRoutes);
 app.use('/auth', authRoutes);
 app.use('/api', routes);
 

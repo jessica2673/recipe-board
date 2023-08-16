@@ -11,10 +11,12 @@ const Login = () => {
         .catch((err) => {
             console.log(err);
         });
+        console.log("response:", response)
 
         if (response && response.data) {
             localStorage.setItem('user', JSON.stringify(response.data))
             await dispatch({type: 'LOGIN', payload: response.data})
+            await console.log('logged in: ', localStorage.getItem('user'))
         }
     }
 
@@ -30,6 +32,7 @@ const Login = () => {
         if (newWindow) {
             timer = setInterval(() => {
                 if (newWindow.closed) {
+                  console.log("window closed");
                   fetchAuthUser();
                   if (timer) clearInterval(timer);
                 }
@@ -49,6 +52,7 @@ const Login = () => {
         if (newWindow) {
             timer = setInterval(() => {
                 if (newWindow.closed) {
+                  console.log("window closed");
                   fetchAuthUser();
                   if (timer) clearInterval(timer);
                 }
